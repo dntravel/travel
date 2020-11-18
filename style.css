@@ -1,0 +1,90 @@
+<style type="text/css">
+
+html {
+  width: 100vw;
+}
+
+#firebase-auth {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.75);
+  z-index: 99;
+}
+
+#firebaseui-auth-container {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 40px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 2px;
+  box-shadow: 2px 2px 15px 1px rgba(0, 0, 0, 0.75);
+  font-family: Inter, sans-serif;
+}
+
+@media (max-width: 775px) {
+  #firebaseui-auth-container {
+    width: 100%;
+  }
+}
+
+#authMethods {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+  align-items: center;
+}
+
+#auth-titile {
+  color: rgba(255, 255, 255, 1);
+  font-weight: 300;
+  margin: 0px;
+  padding-bottom: 20px;
+  text-align: center;
+}
+
+.auth-button {
+  margin: 6px;
+  min-width: 220px;
+}
+
+.itin-exp-btns_txt {
+  cursor: pointer;
+}
+
+#user-pic {
+  width: 40px;
+  background-repeat: no-repeat;
+  height: 40px;
+  background-size: 40px;
+  border-radius: 50%;
+  margin: 0px;
+  padding: 0px;
+}
+
+@media screen and (max-width: 610px) {
+  #user-pic {
+    top: 2px;
+    width: 33px;
+    height: 33px;
+    background-size: 33px;
+  }
+}
+
+#signin {
+  padding: 0px;
+}
+
+#password-input,
+#email-input {
+  width: 220px;
+  padding: 8px;
+}
+
+</ style>
