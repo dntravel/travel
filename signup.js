@@ -302,9 +302,10 @@ const bubble = (() => {
       .then((res) => res.data.userFound)
       .catch();
 
-    const currentUserID = currentUser.results[0].UserID;
-
-    userId = currentUserID !== user.uid ? currentUserID : Auth.currentUser.uid;
+    userId =
+      currentUser.count === 0
+        ? Auth.currentUser.uid
+        : currentUser.results[0].UserID;
 
     if (await currentUser.count) {
       await pull()
