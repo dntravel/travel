@@ -83,6 +83,7 @@ const buttons = [next, previous];
 
 const showDisplay = (boolean) => {
   if (boolean) {
+    itinSections[itinNum].style.display = "block";
     itinSections[itinNum].style.zIndex = 1;
     setTimeout(() => {
       itinSections[itinNum].style.opacity = 1;
@@ -90,8 +91,10 @@ const showDisplay = (boolean) => {
   } else {
     itinSections[itinNum].style.opacity = 0;
     itinSections[itinNum].style.zIndex = -1;
+    itinSections[itinNum].style.display = "none";
   }
 };
+
 const buttonDisplay = () => {
   itinNum === 0
     ? (previous.style.opacity = 0)
@@ -99,6 +102,7 @@ const buttonDisplay = () => {
     ? (next.style.opacity = 0)
     : buttons.forEach((but) => (but.style.opacity = 1));
 };
+
 const toggleDay = () => {
   buttonDisplay();
   buttons.forEach((button) => {
@@ -119,9 +123,12 @@ const toggleDay = () => {
     });
   });
 };
-const selectExperienceButtons = [
-  ...document.querySelectorAll('[id^="select-experience"]'),
-];
+
+const selectExperienceButtons = document.querySelectorAll(
+  '[id="select-experience"]'
+);
+
+const explainerSelectExpButton = document.getElementById("select-experience2");
 
 let nextItin = 0;
 
@@ -131,10 +138,15 @@ const nextItinLoad = () => {
   orderedShow();
   nextItin++;
 };
-selectExperienceButtons.forEach((button) =>
+
+selectExperienceButtons.forEach((button) => {
   button.addEventListener("click", () => {
     nextItinLoad();
-  })
-);
+    explainerSelectExpButton.addEventListener("click", () => {
+      nextItinLoad();
+      itinSections[itinNum].style.zIndex = 1;
+    });
+  });
+});
 
 toggleDay();

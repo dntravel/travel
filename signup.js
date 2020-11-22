@@ -12,7 +12,6 @@ firebase.initializeApp(firebaseConfig);
 const Auth = firebase.auth();
 const Functions = firebase.functions();
 
-const firebaseDiv = document.getElementById("firebase-auth");
 // FACEBOOK INIT
 const facebookInit = () => {
   window.fbAsyncInit = function () {
@@ -71,40 +70,40 @@ const localStorageFunction = (() => {
 // SIGN IN CREDENTIALS
 const credentialAuth = (() => {
   const local = localStorageFunction.localUser;
-  const emailInput = document.getElementById("email-input");
-  const passwordInput = document.getElementById("password-input");
+  // const emailInput = document.getElementById("email-input");
+  // const passwordInput = document.getElementById("password-input");
 
   let email = "";
   let password = "";
 
-  const emailChangeOnInput = () => {
-    if (/@gmail.com$/.test(emailInput.value)) {
-      email = normalizeGmail(emailInput.value);
-    } else {
-      email = emailInput.value;
-    }
-  };
+  // const emailChangeOnInput = () => {
+  //   if (/@gmail.com$/.test(emailInput.value)) {
+  //     email = normalizeGmail(emailInput.value);
+  //   } else {
+  //     email = emailInput.value;
+  //   }
+  // };
 
-  const inputEventListeners = (boo) => {
-    if (boo) {
-      emailInput.addEventListener("input", () => emailChangeOnInput());
-      passwordInput.addEventListener(
-        "input",
-        () => (password = passwordInput.value)
-      );
-    } else {
-      emailInput.removeEventListener("input", () => emailChangeOnInput());
-      passwordInput.removeEventListener(
-        "input",
-        () => (password = passwordInput.value)
-      );
-    }
-  };
+  // const inputEventListeners = (boo) => {
+  //   if (boo) {
+  //     emailInput.addEventListener("input", () => emailChangeOnInput());
+  //     passwordInput.addEventListener(
+  //       "input",
+  //       () => (password = passwordInput.value)
+  //     );
+  //   } else {
+  //     emailInput.removeEventListener("input", () => emailChangeOnInput());
+  //     passwordInput.removeEventListener(
+  //       "input",
+  //       () => (password = passwordInput.value)
+  //     );
+  //   }
+  // };
 
-  const normalizeGmail = (str) => {
-    const inx = str.indexOf("@");
-    return str.substring(0, inx).replace(".", "") + str.substring(inx);
-  };
+  // const normalizeGmail = (str) => {
+  //   const inx = str.indexOf("@");
+  //   return str.substring(0, inx).replace(".", "") + str.substring(inx);
+  // };
 
   const signIn = async () => {
     await Auth.signInWithEmailAndPassword(email, password).catch(() =>
@@ -142,7 +141,7 @@ const credentialAuth = (() => {
 
   return {
     signIn,
-    inputEventListeners,
+    // inputEventListeners,
   };
 })();
 
@@ -326,70 +325,77 @@ const bubble = (() => {
   };
 })();
 
-const toggleSignIn = (boolean) => {
-  const logInOutDiv = document.getElementById("signin");
+// const toggleSignIn = (boolean) => {
+//   const logInOutDiv = document.getElementById("signin");
 
-  if (boolean) {
-    logInOutDiv.innerHTML = `<a id="log-in" href="#" class="nav-link w-nav-link">Sign In</a>`;
-    const logInButton = document.getElementById("log-in");
-    logInButton.addEventListener("click", () => showSignIn(true));
-  } else {
-    logInOutDiv.innerHTML = `<div id="user-pic" class="nav-link w-nav-link" ></div>`;
-    const userPic = document.getElementById("user-pic");
-    userPic.style.backgroundImage = `url("${Auth.currentUser.photoURL}")`;
-  }
-};
+//   if (boolean) {
+//     logInOutDiv.innerHTML = `<a id="log-in" href="#" class="nav-link w-nav-link">Sign In</a>`;
+//     const logInButton = document.getElementById("log-in");
+//     logInButton.addEventListener("click", () => showSignIn(true));
+//   } else {
+//     logInOutDiv.innerHTML = `<div id="user-pic" class="nav-link w-nav-link" ></div>`;
+//     const userPic = document.getElementById("user-pic");
+//     userPic.style.backgroundImage = `url("${Auth.currentUser.photoURL}")`;
+//   }
+// };
 
 const loadLogInEventListeners = (boo) => {
   const google = document.getElementById("google");
   const facebook = document.getElementById("facebook");
-  const emailAuth = document.getElementById("email");
-  const emailNext = [...document.querySelectorAll(".email-next")];
-  const emailClick = document.getElementById("email-click");
+  // const emailAuth = document.getElementById("email");
+  // const emailNext = [...document.querySelectorAll(".email-next")];
+  // const emailClick = document.getElementById("email-click");
   const providers = [google, facebook];
 
   if (boo) {
-    credentialAuth.inputEventListeners(true);
-    emailAuth.addEventListener("click", () => credentialAuth.signIn());
-    emailClick.addEventListener("click", () => {
-      emailNext.forEach((elm) => (elm.style.display = "block"));
-      providers.forEach((elm) => (elm.style.display = "none"));
-      emailClick.style.display = "none";
-      emailAuth.style.display = "block";
-    });
+    // credentialAuth.inputEventListeners(true);
+    // emailAuth.addEventListener("click", () => credentialAuth.signIn());
+    // emailClick.addEventListener("click", () => {
+    //   emailNext.forEach((elm) => (elm.style.display = "block"));
+    //   providers.forEach((elm) => (elm.style.display = "none"));
+    //   emailClick.style.display = "none";
+    //   emailAuth.style.display = "block";
+    // });
     providers.forEach((but) => {
       but.addEventListener("click", () => providerAuth.assign(but));
     });
   } else {
-    credentialAuth.inputEventListeners(false);
-    emailAuth.removeEventListener("click", () => credentialAuth.signIn());
-    emailNext.forEach((elm) => (elm.style.display = "none"));
+    // credentialAuth.inputEventListeners(false);
+    // emailAuth.removeEventListener("click", () => credentialAuth.signIn());
+    // emailNext.forEach((elm) => (elm.style.display = "none"));
     providers.forEach((but) => {
       but.removeEventListener("click", () => providerAuth.assign(but));
       but.style.display = "block";
     });
-    emailClick.style.display = "block";
-    emailAuth.style.display = "none";
+    // emailClick.style.display = "block";
+    // emailAuth.style.display = "none";
   }
 };
+
+const firebaseDiv = document.getElementById("firebase-auth");
+const signup1 = document.querySelector(".signup1-section");
 
 const showSignIn = (boo) => {
   if (boo) {
     loadLogInEventListeners(true);
-    firebaseDiv.removeAttribute("hidden");
+    signup1.style.display = "block";
+    signup1.style.zIndex = 99;
+    // firebaseDiv.removeAttribute("hidden");
   } else {
     loadLogInEventListeners(false);
-    firebaseDiv.setAttribute("hidden", "");
+    signup1.style.display = "none";
+    // firebaseDiv.setAttribute("hidden", "");
   }
 };
 
 Auth.onAuthStateChanged((user) => {
   if (user) {
     localStorageFunction.setUser(user);
-    toggleSignIn(false);
+    // toggleSignIn(false);
     showSignIn(false);
     bubble.connect(user);
-  } else {
-    toggleSignIn(true);
   }
+  // else {
+  //   toggleSignIn(true);
+  // }
 });
