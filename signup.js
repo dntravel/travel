@@ -170,6 +170,7 @@ const localStorageFunction = (() => {
         email: "",
         uid: "",
         photoURL: "",
+        experiences: [],
       };
 
   const setUser = (result) => {
@@ -179,11 +180,50 @@ const localStorageFunction = (() => {
     setLocalUser();
   };
 
+  const setExperience = (arr) => {
+    localUser.experiences = arr;
+    setLocalUser();
+  };
+
+  const editExperience = (but) => {
+    let exp = {
+      tripID: experience.tripID(but),
+      expID: experience.expID(but),
+    };
+
+    let inx = experience.experiencePrevSelected(
+      localUser.experiences,
+      exp.tripID,
+      exp.expID
+    );
+
+    inx === -1
+      ? localUser.experiences.push(exp)
+      : localUser.experiences.splice(inx, 1);
+
+    localUser.experiences.sort((a, b) => {
+      let tripA = Number(a.tripID),
+        tripB = Number(b.tripID),
+        expA = Number(a.expID),
+        expB = Number(b.expID);
+
+      if (tripA < tripB) return -1;
+      if (tripA > tripB) return 1;
+
+      if (expA < expB) return -1;
+      if (expA > expB) return 1;
+    });
+
+    setLocalUser();
+  };
+
   return {
     localUser,
     getLocalUser,
     setLocalUser,
     setUser,
+    setExperience,
+    editExperience,
   };
 })();
 
@@ -323,6 +363,7 @@ const experience = (() => {
       : showSelectedExperience(but, false);
 
     bubble.edit(but);
+    localStorageFunction.editExperience(but);
   };
 
   const initializeButton = (but, trip, exp) => {
@@ -376,6 +417,7 @@ const experience = (() => {
     tripID,
     toggle,
     expButtons,
+    experiencePrevSelected,
   };
 })();
 
@@ -429,7 +471,10 @@ const bubble = (() => {
 
     if (await currentUser.count) {
       await pull()
-        .then((arr) => experience.expButtons(arr))
+        .then((arr) => {
+          experience.expButtons(arr);
+          localStorageFunction.setExperience(arr);
+        })
         .catch();
     } else {
       await register(user)
@@ -470,7 +515,7 @@ const loadLogInEventListeners = (boo) => {
   const emailNext = [...document.querySelectorAll(".email-next")];
   const emailClick = document.getElementById("email-click");
   const providers = [...google, ...facebook];
-  console.log(google, facebook, providers);
+
   if (boo) {
     credentialAuth.inputEventListeners(true);
     emailAuth.addEventListener("click", () => credentialAuth.signIn());
