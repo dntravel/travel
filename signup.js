@@ -38,6 +38,124 @@ const facebookInit = () => {
   })(document, "script", "facebook-jssdk");
 };
 
+const signup2HTML = `<div id="firebase-auth">
+  <div id="firebaseui-auth-container">
+    <h3 id="auth-titile">
+      See all experiences and create your amazing holiday!
+    </h3>
+    <ul id="authMethods">
+      <li
+        class="firebaseui-list-item auth-button email-next"
+        style="display: none"
+      >
+        <input type="email" id="email-input" placeholder="Email" />
+      </li>
+      <li
+        class="firebaseui-list-item auth-button email-next"
+        style="display: none"
+      >
+        <input type="password" id="password-input" placeholder="Password" />
+      </li>
+
+      <li
+        id="email"
+        class="firebaseui-list-item auth-button"
+        style="display: none"
+      >
+        <button
+          class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-password firebaseui-id-idp-button"
+          data-provider-id="password"
+          style="background-color: #db4437"
+          data-upgraded=",MaterialButton"
+        >
+          <span class="firebaseui-idp-icon-wrapper"
+            ><img
+              class="firebaseui-idp-icon"
+              alt=""
+              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/mail.svg" /></span
+          ><span class="firebaseui-idp-text firebaseui-idp-text-long"
+            >Sign in with email</span
+          ><span class="firebaseui-idp-text firebaseui-idp-text-short"
+            >Email</span
+          >
+        </button>
+      </li>
+      <li id="email-click" class="firebaseui-list-item auth-button">
+        <button
+          class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-password firebaseui-id-idp-button"
+          data-provider-id="password"
+          style="background-color: #db4437"
+          data-upgraded=",MaterialButton"
+        >
+          <span class="firebaseui-idp-icon-wrapper"
+            ><img
+              class="firebaseui-idp-icon"
+              alt=""
+              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/mail.svg" /></span
+          ><span class="firebaseui-idp-text firebaseui-idp-text-long"
+            >Sign in with email</span
+          ><span class="firebaseui-idp-text firebaseui-idp-text-short"
+            >Email</span
+          >
+        </button>
+      </li>
+      <li id="google" class="firebaseui-list-item auth-button">
+        <button
+          class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-google firebaseui-id-idp-button"
+          data-provider-id="google.com"
+          style="background-color: #ffffff"
+          data-upgraded=",MaterialButton"
+        >
+          <span class="firebaseui-idp-icon-wrapper"
+            ><img
+              class="firebaseui-idp-icon"
+              alt=""
+              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" /></span
+          ><span class="firebaseui-idp-text firebaseui-idp-text-long"
+            >Sign in with Google</span
+          ><span class="firebaseui-idp-text firebaseui-idp-text-short"
+            >Google</span
+          >
+        </button>
+      </li>
+      <li id="facebook" class="firebaseui-list-item auth-button">
+        <button
+          class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-facebook firebaseui-id-idp-button"
+          data-provider-id="facebook.com"
+          style="background-color: #3b5998"
+          data-upgraded=",MaterialButton"
+        >
+          <span class="firebaseui-idp-icon-wrapper"
+            ><img
+              class="firebaseui-idp-icon"
+              alt=""
+              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg" /></span
+          ><span class="firebaseui-idp-text firebaseui-idp-text-long"
+            >Sign in with Facebook</span
+          ><span class="firebaseui-idp-text firebaseui-idp-text-short"
+            >Facebook</span
+          >
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
+const createSignUpWindow2 = (() => {
+  const parent = document.querySelector(".parent");
+  const createSignUp2 = document.createElement("div");
+  createSignUp2.classList.add("signup2-section");
+  createSignUp2.innerHTML = signup2HTML;
+  createSignUp2.setAttribute("hidden", "");
+  parent.appendChild(createSignUp2);
+
+  next.addEventListener("click", () => {
+    loadLogInEventListeners(true);
+    createSignUp2.removeAttribute("hidden");
+  });
+})();
+
 // LOCAL STORAGE FUNCTIONS
 const localStorageFunction = (() => {
   const getLocalUser = () => JSON.parse(localStorage.getItem("User"));
@@ -70,40 +188,40 @@ const localStorageFunction = (() => {
 // SIGN IN CREDENTIALS
 const credentialAuth = (() => {
   const local = localStorageFunction.localUser;
-  // const emailInput = document.getElementById("email-input");
-  // const passwordInput = document.getElementById("password-input");
+  const emailInput = document.getElementById("email-input");
+  const passwordInput = document.getElementById("password-input");
 
   let email = "";
   let password = "";
 
-  // const emailChangeOnInput = () => {
-  //   if (/@gmail.com$/.test(emailInput.value)) {
-  //     email = normalizeGmail(emailInput.value);
-  //   } else {
-  //     email = emailInput.value;
-  //   }
-  // };
+  const emailChangeOnInput = () => {
+    if (/@gmail.com$/.test(emailInput.value)) {
+      email = normalizeGmail(emailInput.value);
+    } else {
+      email = emailInput.value;
+    }
+  };
 
-  // const inputEventListeners = (boo) => {
-  //   if (boo) {
-  //     emailInput.addEventListener("input", () => emailChangeOnInput());
-  //     passwordInput.addEventListener(
-  //       "input",
-  //       () => (password = passwordInput.value)
-  //     );
-  //   } else {
-  //     emailInput.removeEventListener("input", () => emailChangeOnInput());
-  //     passwordInput.removeEventListener(
-  //       "input",
-  //       () => (password = passwordInput.value)
-  //     );
-  //   }
-  // };
+  const inputEventListeners = (boo) => {
+    if (boo) {
+      emailInput.addEventListener("input", () => emailChangeOnInput());
+      passwordInput.addEventListener(
+        "input",
+        () => (password = passwordInput.value)
+      );
+    } else {
+      emailInput.removeEventListener("input", () => emailChangeOnInput());
+      passwordInput.removeEventListener(
+        "input",
+        () => (password = passwordInput.value)
+      );
+    }
+  };
 
-  // const normalizeGmail = (str) => {
-  //   const inx = str.indexOf("@");
-  //   return str.substring(0, inx).replace(".", "") + str.substring(inx);
-  // };
+  const normalizeGmail = (str) => {
+    const inx = str.indexOf("@");
+    return str.substring(0, inx).replace(".", "") + str.substring(inx);
+  };
 
   const signIn = async () => {
     await Auth.signInWithEmailAndPassword(email, password).catch(() =>
@@ -141,7 +259,7 @@ const credentialAuth = (() => {
 
   return {
     signIn,
-    // inputEventListeners,
+    inputEventListeners,
   };
 })();
 
@@ -340,52 +458,51 @@ const bubble = (() => {
 //   }
 // };
 
-const loadLogInEventListeners = (boo) => {
-  const google = document.getElementById("google");
-  const facebook = document.getElementById("facebook");
-  // const emailAuth = document.getElementById("email");
-  // const emailNext = [...document.querySelectorAll(".email-next")];
-  // const emailClick = document.getElementById("email-click");
-  const providers = [google, facebook];
+const signup1 = document.querySelector(".signup1-section");
+const signup2 = document.querySelector(".signup2-section");
 
+const loadLogInEventListeners = (boo) => {
+  const google = document.querySelectorAll("#google");
+  const facebook = document.querySelectorAll("#facebook");
+  const emailAuth = document.getElementById("email");
+  const emailNext = [...document.querySelectorAll(".email-next")];
+  const emailClick = document.getElementById("email-click");
+  const providers = [...google, ...facebook];
+  console.log(google, facebook, providers);
   if (boo) {
-    // credentialAuth.inputEventListeners(true);
-    // emailAuth.addEventListener("click", () => credentialAuth.signIn());
-    // emailClick.addEventListener("click", () => {
-    //   emailNext.forEach((elm) => (elm.style.display = "block"));
-    //   providers.forEach((elm) => (elm.style.display = "none"));
-    //   emailClick.style.display = "none";
-    //   emailAuth.style.display = "block";
-    // });
+    credentialAuth.inputEventListeners(true);
+    emailAuth.addEventListener("click", () => credentialAuth.signIn());
+    emailClick.addEventListener("click", () => {
+      emailNext.forEach((elm) => (elm.style.display = "block"));
+      providers.forEach((elm) => (elm.style.display = "none"));
+      emailClick.style.display = "none";
+      emailAuth.style.display = "block";
+    });
     providers.forEach((but) => {
       but.addEventListener("click", () => providerAuth.assign(but));
     });
   } else {
-    // credentialAuth.inputEventListeners(false);
-    // emailAuth.removeEventListener("click", () => credentialAuth.signIn());
-    // emailNext.forEach((elm) => (elm.style.display = "none"));
+    credentialAuth.inputEventListeners(false);
+    emailAuth.removeEventListener("click", () => credentialAuth.signIn());
+    emailNext.forEach((elm) => (elm.style.display = "none"));
     providers.forEach((but) => {
       but.removeEventListener("click", () => providerAuth.assign(but));
       but.style.display = "block";
     });
-    // emailClick.style.display = "block";
-    // emailAuth.style.display = "none";
+    emailClick.style.display = "block";
+    emailAuth.style.display = "none";
   }
 };
-
-const firebaseDiv = document.getElementById("firebase-auth");
-const signup1 = document.querySelector(".signup1-section");
 
 const showSignIn = (boo) => {
   if (boo) {
     loadLogInEventListeners(true);
     signup1.style.display = "block";
     signup1.style.zIndex = 99;
-    // firebaseDiv.removeAttribute("hidden");
   } else {
     loadLogInEventListeners(false);
     signup1.style.display = "none";
-    // firebaseDiv.setAttribute("hidden", "");
+    signup2.setAttribute("hidden", "");
   }
 };
 
