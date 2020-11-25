@@ -151,8 +151,10 @@ const createSignUpWindow2 = (() => {
   parent.appendChild(createSignUp2);
 
   next.addEventListener("click", () => {
-    loadLogInEventListeners(true);
-    createSignUp2.removeAttribute("hidden");
+    if (!Auth.currentUser) {
+      loadLogInEventListeners(true);
+      createSignUp2.removeAttribute("hidden");
+    }
   });
 })();
 
