@@ -1,7 +1,7 @@
 const destinations = [
-  { link: "barcelona.html", id: "1", display: "Barcelona" },
-  { link: "venice.html", id: "2", display: "Venice" },
-  { link: "paris.html", id: "3", display: "Paris" },
+  { link: "barcelona1", id: "1", display: "Barcelona" },
+  { link: "venice1", id: "2", display: "Venice" },
+  { link: "paris1", id: "3", display: "Paris" },
 ];
 
 let user = JSON.parse(localStorage.getItem("User"));
