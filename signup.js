@@ -1,43 +1,3 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyBRZfDCC3YyZutj-lOnDxhq4n7u9AtOkCs",
-  authDomain: "travel-895d5.firebaseapp.com",
-  databaseURL: "https://travel-895d5.firebaseio.com",
-  projectId: "travel-895d5",
-  storageBucket: "travel-895d5.appspot.com",
-  messagingSenderId: "74709196792",
-  appId: "1:74709196792:web:d37d5c4069c2191b46c00d",
-};
-// FIREBASE INIT
-firebase.initializeApp(firebaseConfig);
-const Auth = firebase.auth();
-const Functions = firebase.functions();
-
-// FACEBOOK INIT
-const facebookInit = () => {
-  window.fbAsyncInit = function () {
-    FB.init({
-      appId: 367693800966361,
-      cookie: true,
-      xfbml: true,
-      version: "v8.0",
-    });
-
-    FB.AppEvents.logPageView();
-  };
-
-  (function (d, s, id) {
-    var js,
-      fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {
-      return;
-    }
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  })(document, "script", "facebook-jssdk");
-};
-
 const signup2HTML = `<div id="firebase-auth">
   <div id="firebaseui-auth-container">
     <h3 id="auth-titile">
@@ -157,6 +117,9 @@ const createSignUpWindow2 = (() => {
     }
   });
 })();
+
+// SESSION STORAGE FUNCTIONS
+const authenticated = () => JSON.parse(sessionStorage.getItem("Authenticated"));
 
 // LOCAL STORAGE FUNCTIONS
 const localStorageFunction = (() => {
@@ -397,12 +360,10 @@ const experience = (() => {
   });
 
   const expButtons = async (arr) => {
-    const userLoggedIn = await Auth.currentUser;
-
     experienceButtons.forEach(async (but) => {
       let tripId = tripID(but);
       let expId = expID(but);
-      if (userLoggedIn) {
+      if (Auth.currentUser || authenticated()) {
         if (experiencePrevSelected(arr, tripId, expId) >= 0) {
           showSelectedExperience(but, true);
         }
@@ -422,7 +383,7 @@ const experience = (() => {
 })();
 
 const bubble = (() => {
-  let userId;
+  let userId = localStorageFunction.localUser.uid;
 
   const pull = async () => {
     const getExperiences = await Functions.httpsCallable("getExperiences");
@@ -464,29 +425,28 @@ const bubble = (() => {
       .then((res) => res.data.userFound)
       .catch();
 
-    userId =
-      currentUser.count === 0
-        ? Auth.currentUser.uid
-        : currentUser.results[0].UserID;
-
     if (await currentUser.count) {
+      userId = currentUser.results[0].UserID;
       await pull()
         .then((arr) => {
+          sessionStorage.setItem("Authenticated", "true");
           experience.expButtons(arr);
           localStorageFunction.setExperience(arr);
         })
         .catch();
     } else {
       await register(user)
-        .then(() =>
-          edit(document.querySelector("[data-experience-selected='true']"))
-        )
+        .then(() => {
+          edit(document.querySelector("[data-experience-selected='true']"));
+          sessionStorage.setItem("Authenticated", "true");
+        })
         .catch();
     }
   };
 
   return {
     edit,
+    pull,
     connect,
   };
 })();
@@ -553,14 +513,15 @@ const showSignIn = (boo) => {
   }
 };
 
-Auth.onAuthStateChanged((user) => {
-  if (user) {
-    localStorageFunction.setUser(user);
-    // toggleSignIn(false);
-    showSignIn(false);
-    bubble.connect(user);
-  }
-  // else {
-  //   toggleSignIn(true);
-  // }
-});
+if (authenticated()) {
+  const exps = localStorageFunction.localUser.experiences;
+  experience.expButtons(exps);
+} else {
+  Auth.onAuthStateChanged((user) => {
+    if (user) {
+      localStorageFunction.setUser(user);
+      showSignIn(false);
+      bubble.connect(user);
+    }
+  });
+}

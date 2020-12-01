@@ -2,6 +2,8 @@ html {
   width: 100vw;
 }
 
+/* SIGN IN */
+
 #firebase-auth {
   position: fixed;
   top: 0;
@@ -83,4 +85,12 @@ html {
 #email-input {
   width: 220px;
   padding: 8px;
+}
+
+/* HOME */
+
+#destinations {
+  list-style: none;
+  padding: 15px;
+  margin: 0px;
 }
