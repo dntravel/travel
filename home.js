@@ -59,11 +59,10 @@ const destinationList = (arr) => {
 };
 
 const returnUser = () => {
-  console.log("retuser");
   firebaseCall()
     .pull()
     .then((exps) => {
-      const tripIds = trips(exps);
+      const tripIds = exps.length ? trips(exps) : user.viewed;
       destinationList(tripIds);
       loadingDiv.style.display = "none";
       returnDiv.style.display = "block";
@@ -77,9 +76,8 @@ const returnUser = () => {
 };
 
 const returnHome = () => {
-  console.log("rethome");
   const experiences = user.experiences;
-  const tripIds = trips(experiences);
+  const tripIds = experiences.length ? trips(experiences) : user.viewed;
   destinationList(tripIds);
   loadingDiv.style.display = "none";
   returnDiv.style.display = "block";

@@ -134,6 +134,7 @@ const localStorageFunction = (() => {
         uid: "",
         photoURL: "",
         experiences: [],
+        viewed: [],
       };
 
   const setUser = (result) => {
@@ -180,6 +181,26 @@ const localStorageFunction = (() => {
     setLocalUser();
   };
 
+  const tripsViewed = () => {
+    let tripID = document
+      .querySelector(".itin-exp-btns_txt")
+      .getAttribute("data-tripid");
+
+    let viewed = localUser.viewed;
+
+    if (!viewed) {
+      viewed = [tripID];
+    } else {
+      if (viewed.indexOf(tripID) === -1) {
+        viewed.push(tripID);
+      } else return;
+    }
+
+    localUser.viewed = viewed;
+
+    setLocalUser();
+  };
+
   return {
     localUser,
     getLocalUser,
@@ -187,6 +208,7 @@ const localStorageFunction = (() => {
     setUser,
     setExperience,
     editExperience,
+    tripsViewed,
   };
 })();
 
@@ -525,3 +547,5 @@ if (authenticated()) {
     }
   });
 }
+
+localStorageFunction.tripsViewed();
