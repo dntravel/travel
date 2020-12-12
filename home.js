@@ -1,8 +1,19 @@
-const destinations = [
-  { link: "barcelona1", id: "1", display: "Barcelona" },
-  { link: "venice1", id: "2", display: "Venice" },
-  { link: "paris1", id: "3", display: "Paris" },
-];
+const tripUrlSection = document.getElementById("TRIPID-URLS");
+const tripUrlElements =
+  tripUrlSection.firstElementChild.firstElementChild.children;
+
+const destinations = [...tripUrlElements].map((elm) => {
+  let display = elm.firstElementChild.innerHTML;
+  let id = elm.firstElementChild.nextElementSibling.innerHTML;
+  let url = elm.lastElementChild.innerHTML.trim();
+  let link = url.substr(url.lastIndexOf("/"));
+
+  return {
+    link,
+    id,
+    display,
+  };
+});
 
 let user = JSON.parse(localStorage.getItem("User"));
 
