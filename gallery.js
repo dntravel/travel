@@ -50,8 +50,9 @@ async function updateGallery(_myGallery, container) {
   });
 }
 
-async function orderedShow() {
-  let containers = document.querySelectorAll("[data-gallery='true']");
+async function orderedShow(block) {
+  let containers = block.querySelectorAll("[data-gallery='true']");
+
   var galleries = [];
   for (galleryContainer of containers) {
     if (!galleryContainer.getAttribute("data-loaded")) {
@@ -69,84 +70,47 @@ async function orderedShow() {
   }
 }
 
-// ITIN SECTIONS
-const itinSections = [...document.querySelectorAll('[class^="itin-section"]')];
+const itinSection = document.querySelector(".itin-section");
+const loadSection = document.querySelector(".loading-section");
+const blocks = document.querySelectorAll('[id^="BLOCK"]');
 
-itinSections.forEach((section) => (section.style.transition = "all 1s ease"));
+const observeItin = () => {
+  const config = { attributes: true };
+  const callback = (mutationsList, observer) => {
+    for (const mutation of mutationsList) {
+      if (
+        mutation.target.classList.value === "loading-section" &&
+        mutation.target.style.display === "none"
+      ) {
+        itinSection.style.opacity = 1;
+      }
+      if (!mutation.target.getAttribute("data-loaded")) {
+        orderedShow(mutation.target);
+        mutation.target.setAttribute("data-loaded", true);
+      }
+    }
+  };
 
-// NEXT/PREVIOUS DAY BUTTONS
-let itinNum = 0;
+  const observer = new MutationObserver(callback);
 
-const next = document.getElementById("next-day");
-const previous = document.getElementById("previous-day");
-const buttons = [next, previous];
-
-const showDisplay = (boolean) => {
-  if (boolean) {
-    itinSections[itinNum].style.display = "block";
-    itinSections[itinNum].style.zIndex = 1;
-    setTimeout(() => {
-      itinSections[itinNum].style.opacity = 1;
-    }, 1000);
-  } else {
-    itinSections[itinNum].style.opacity = 0;
-    itinSections[itinNum].style.zIndex = -1;
-    itinSections[itinNum].style.display = "none";
-  }
+  blocks.forEach((block) => observer.observe(block, config));
+  observer.observe(loadSection, config);
 };
 
-const buttonDisplay = () => {
-  itinNum === 0
-    ? (previous.style.opacity = 0)
-    : itinNum === itinSections.length - 1
-    ? (next.style.opacity = 0)
-    : buttons.forEach((but) => (but.style.opacity = 1));
-};
+const selectExperiences = () => {
+  let buttons = document.querySelectorAll('[id="select-experience"]');
 
-const toggleDay = () => {
-  buttonDisplay();
+  itinSection.style.opacity = 0;
+  itinSection.style.zIndex = -1;
+  itinSection.style.transition = "all 1s ease";
+
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
-      showDisplay(false);
-      button.id === "next-day"
-        ? itinNum === itinSections.length - 1
-          ? null
-          : itinNum++
-        : itinNum === 0
-        ? null
-        : itinNum--;
-      showDisplay(true);
-      buttonDisplay();
-      if (button.id === "next-day" && nextItin < itinSections.length) {
-        nextItinLoad();
-      }
+      observeItin();
+      itinSection.style.display = "block";
+      orderedShow(blocks[0]);
     });
   });
 };
 
-const selectExperienceButtons = document.querySelectorAll(
-  '[id="select-experience"]'
-);
-
-const explainerSelectExpButton = document.getElementById("select-experience2");
-
-let nextItin = 0;
-
-const nextItinLoad = () => {
-  itinSections[nextItin].style.zIndex = -1;
-  itinSections[nextItin].style.display = "block";
-  orderedShow();
-  nextItin++;
-};
-
-selectExperienceButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    nextItinLoad();
-    explainerSelectExpButton.addEventListener("click", () => {
-      nextItinLoad();
-      itinSections[itinNum].style.zIndex = 1;
-    });
-  });
-});
-
-toggleDay();
+selectExperiences();
