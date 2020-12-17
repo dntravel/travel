@@ -110,11 +110,19 @@ const createSignUpWindow2 = (() => {
   createSignUp2.setAttribute("hidden", "");
   parent.appendChild(createSignUp2);
 
-  next.addEventListener("click", () => {
-    if (!Auth.currentUser) {
-      loadLogInEventListeners(true);
-      createSignUp2.removeAttribute("hidden");
-    }
+  let buttons = document.querySelectorAll('[id="select-experience"]');
+
+  buttons.forEach((but) => {
+    but.addEventListener("click", () => {
+      document.addEventListener("scroll", () => {
+        if (window.pageYOffset > 1000) {
+          if (!Auth.currentUser) {
+            loadLogInEventListeners(true);
+            createSignUp2.removeAttribute("hidden");
+          }
+        }
+      });
+    });
   });
 })();
 
@@ -337,7 +345,7 @@ const experience = (() => {
   const showSelectedExperience = (but, boolean) => {
     but.setAttribute("data-experience-selected", `${boolean}`);
     but.innerHTML = boolean
-      ? `<i class="fa fa-heart" aria-hidden="true"></i>  REMOVE FROM LIST`
+      ? `<i class="fa fa-heart" aria-hidden="true"></i>  ADDED TO LIST`
       : `<i class="fa fa-heart-o" aria-hidden="true"></i>  ADD TO LIST`;
   };
 
@@ -472,20 +480,6 @@ const bubble = (() => {
     connect,
   };
 })();
-
-// const toggleSignIn = (boolean) => {
-//   const logInOutDiv = document.getElementById("signin");
-
-//   if (boolean) {
-//     logInOutDiv.innerHTML = `<a id="log-in" href="#" class="nav-link w-nav-link">Sign In</a>`;
-//     const logInButton = document.getElementById("log-in");
-//     logInButton.addEventListener("click", () => showSignIn(true));
-//   } else {
-//     logInOutDiv.innerHTML = `<div id="user-pic" class="nav-link w-nav-link" ></div>`;
-//     const userPic = document.getElementById("user-pic");
-//     userPic.style.backgroundImage = `url("${Auth.currentUser.photoURL}")`;
-//   }
-// };
 
 const signup1 = document.querySelector(".signup1-section");
 const signup2 = document.querySelector(".signup2-section");
