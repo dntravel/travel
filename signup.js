@@ -1,131 +1,3 @@
-const signup2HTML = `<div id="firebase-auth">
-  <div id="firebaseui-auth-container">
-    <h3 id="auth-titile">
-      See all experiences and create your amazing holiday!
-    </h3>
-    <ul id="authMethods">
-      <li
-        class="firebaseui-list-item auth-button email-next"
-        style="display: none"
-      >
-        <input type="email" id="email-input" placeholder="Email" />
-      </li>
-      <li
-        class="firebaseui-list-item auth-button email-next"
-        style="display: none"
-      >
-        <input type="password" id="password-input" placeholder="Password" />
-      </li>
-
-      <li
-        id="email"
-        class="firebaseui-list-item auth-button"
-        style="display: none"
-      >
-        <button
-          class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-password firebaseui-id-idp-button"
-          data-provider-id="password"
-          style="background-color: #db4437"
-          data-upgraded=",MaterialButton"
-        >
-          <span class="firebaseui-idp-icon-wrapper"
-            ><img
-              class="firebaseui-idp-icon"
-              alt=""
-              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/mail.svg" /></span
-          ><span class="firebaseui-idp-text firebaseui-idp-text-long"
-            >Sign in with email</span
-          ><span class="firebaseui-idp-text firebaseui-idp-text-short"
-            >Email</span
-          >
-        </button>
-      </li>
-      <li id="email-click" class="firebaseui-list-item auth-button">
-        <button
-          class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-password firebaseui-id-idp-button"
-          data-provider-id="password"
-          style="background-color: #db4437"
-          data-upgraded=",MaterialButton"
-        >
-          <span class="firebaseui-idp-icon-wrapper"
-            ><img
-              class="firebaseui-idp-icon"
-              alt=""
-              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/mail.svg" /></span
-          ><span class="firebaseui-idp-text firebaseui-idp-text-long"
-            >Sign in with email</span
-          ><span class="firebaseui-idp-text firebaseui-idp-text-short"
-            >Email</span
-          >
-        </button>
-      </li>
-      <li id="google" class="firebaseui-list-item auth-button">
-        <button
-          class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-google firebaseui-id-idp-button"
-          data-provider-id="google.com"
-          style="background-color: #ffffff"
-          data-upgraded=",MaterialButton"
-        >
-          <span class="firebaseui-idp-icon-wrapper"
-            ><img
-              class="firebaseui-idp-icon"
-              alt=""
-              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" /></span
-          ><span class="firebaseui-idp-text firebaseui-idp-text-long"
-            >Sign in with Google</span
-          ><span class="firebaseui-idp-text firebaseui-idp-text-short"
-            >Google</span
-          >
-        </button>
-      </li>
-      <li id="facebook" class="firebaseui-list-item auth-button">
-        <button
-          class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-facebook firebaseui-id-idp-button"
-          data-provider-id="facebook.com"
-          style="background-color: #3b5998"
-          data-upgraded=",MaterialButton"
-        >
-          <span class="firebaseui-idp-icon-wrapper"
-            ><img
-              class="firebaseui-idp-icon"
-              alt=""
-              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg" /></span
-          ><span class="firebaseui-idp-text firebaseui-idp-text-long"
-            >Sign in with Facebook</span
-          ><span class="firebaseui-idp-text firebaseui-idp-text-short"
-            >Facebook</span
-          >
-        </button>
-      </li>
-    </ul>
-  </div>
-</div>
-`;
-
-const createSignUpWindow2 = (() => {
-  const parent = document.querySelector(".parent");
-  const createSignUp2 = document.createElement("div");
-  createSignUp2.classList.add("signup2-section");
-  createSignUp2.innerHTML = signup2HTML;
-  createSignUp2.setAttribute("hidden", "");
-  parent.appendChild(createSignUp2);
-
-  let buttons = document.querySelectorAll('[id="select-experience"]');
-
-  buttons.forEach((but) => {
-    but.addEventListener("click", () => {
-      document.addEventListener("scroll", () => {
-        if (window.pageYOffset > 1000) {
-          if (!Auth.currentUser) {
-            loadLogInEventListeners(true);
-            createSignUp2.removeAttribute("hidden");
-          }
-        }
-      });
-    });
-  });
-})();
-
 // SESSION STORAGE FUNCTIONS
 const authenticated = () => JSON.parse(sessionStorage.getItem("Authenticated"));
 
@@ -482,7 +354,25 @@ const bubble = (() => {
 })();
 
 const signup1 = document.querySelector(".signup1-section");
-const signup2 = document.querySelector(".signup2-section");
+const signup2 = document.querySelector(".itin-signup-barrier-cont");
+
+const createSignUpWindow2 = (() => {
+  signup2.style.display = "none";
+
+  let buttons = document.querySelectorAll('[id="select-experience"]');
+  let block3 = document.querySelector("#BLOCK3");
+
+  buttons.forEach((but) => {
+    but.addEventListener("click", () => {
+      document.addEventListener("scroll", () => {
+        if (window.pageYOffset > block3.offsetTop && !Auth.currentUser) {
+          loadLogInEventListeners(true);
+          signup2.style.display = "flex";
+        }
+      });
+    });
+  });
+})();
 
 const loadLogInEventListeners = (boo) => {
   const google = document.querySelectorAll("#google");
@@ -525,7 +415,7 @@ const showSignIn = (boo) => {
   } else {
     loadLogInEventListeners(false);
     signup1.style.display = "none";
-    signup2.setAttribute("hidden", "");
+    signup2.style.display = "none";
   }
 };
 
