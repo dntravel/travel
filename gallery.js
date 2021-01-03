@@ -8,15 +8,19 @@ async function createGallery(container) {
     cloudName: "dtgbbrxs0",
     carouselStyle: "none",
     aspectRatio: "16:9",
-    mediaAssets: [
-      {
-        publicId: "robot5",
-        mediaType: "image",
-      },
-    ],
+    mediaAssets: container
+      .getAttribute("data-tags")
+      .split(";")
+      .reduce((acc, curr) => {
+        let [tag, mediaType = "image"] = curr.trim().split(":");
+        acc.push({
+          tag,
+          mediaType,
+        });
+        return acc;
+      }, []),
     zoom: false,
     preload: ["image", "video"],
-    placeholderImage: true,
     videoProps: {
       autoplay: false,
       controls: "play",
@@ -32,24 +36,6 @@ async function createGallery(container) {
   return _myGallery;
 }
 
-async function updateGallery(_myGallery, container) {
-  var tags = container
-    .getAttribute("data-tags")
-    .split(";")
-    .reduce((acc, curr) => {
-      let [tag, mediaType = "image"] = curr.trim().split(":");
-      acc.push({
-        tag,
-        mediaType,
-      });
-      return acc;
-    }, []);
-
-  await _myGallery.update({
-    mediaAssets: tags,
-  });
-}
-
 async function orderedShow(block) {
   let containers = block.querySelectorAll("[data-gallery='true']");
 
@@ -61,12 +47,9 @@ async function orderedShow(block) {
           gallery: await createGallery(galleryContainer),
           container: galleryContainer,
         });
+        gallery.container.setAttribute("data-loaded", true);
       } catch (e) {}
     }
-  }
-  for (gallery of galleries) {
-    await updateGallery(gallery.gallery, gallery.container);
-    gallery.container.setAttribute("data-loaded", true);
   }
 }
 
