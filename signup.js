@@ -1,6 +1,52 @@
 // SESSION STORAGE FUNCTIONS
 const authenticated = () => JSON.parse(sessionStorage.getItem("Authenticated"));
 
+const loadLogInEventListeners = (boo) => {
+  const google = document.querySelectorAll("#google");
+  const facebook = document.querySelectorAll("#facebook");
+  const emailAuth = document.getElementById("email");
+  const emailNext = [...document.querySelectorAll(".email-next")];
+  const emailClick = document.getElementById("email-click");
+  const providers = [...google, ...facebook];
+
+  if (boo) {
+    credentialAuth.inputEventListeners(true);
+    emailAuth.addEventListener("click", () => credentialAuth.signIn());
+    emailClick.addEventListener("click", () => {
+      emailNext.forEach((elm) => (elm.style.display = "block"));
+      providers.forEach((elm) => (elm.style.display = "none"));
+      emailClick.style.display = "none";
+      emailAuth.style.display = "block";
+    });
+    providers.forEach((but) => {
+      but.addEventListener("click", () => providerAuth.assign(but));
+    });
+  } else {
+    credentialAuth.inputEventListeners(false);
+    emailAuth.removeEventListener("click", () => credentialAuth.signIn());
+    emailNext.forEach((elm) => (elm.style.display = "none"));
+    providers.forEach((but) => {
+      but.removeEventListener("click", () => providerAuth.assign(but));
+      but.style.display = "block";
+    });
+    emailClick.style.display = "block";
+    emailAuth.style.display = "none";
+  }
+};
+
+const signup = document.querySelector(".itin-signup-barrier-cont");
+
+const showSignIn = (boo) => {
+  if (boo) {
+    loadLogInEventListeners(true);
+    signup.style.display = "flex";
+    signup.style.zIndex = 100;
+  } else {
+    loadLogInEventListeners(false);
+    signup.style.display = "none";
+  }
+};
+
 // LOCAL STORAGE FUNCTIONS
 const localStorageFunction = (() => {
   const getLocalUser = () => JSON.parse(localStorage.getItem("User"));
@@ -21,6 +67,7 @@ const localStorageFunction = (() => {
     localUser.email = result.email;
     localUser.uid = result.uid;
     localUser.photoURL = result.photoURL;
+    localUser.name = result.displayName ? result.displayName : "";
     setLocalUser();
   };
 
@@ -65,10 +112,11 @@ const localStorageFunction = (() => {
     let tripID = document
       .querySelector(".itin-exp-btns_txt")
       .getAttribute("data-tripid");
-
+    console.log(tripID);
     let viewed = localUser.viewed;
+    console.log(viewed);
 
-    if (!viewed) {
+    if (!viewed && tripID) {
       viewed = [tripID];
     } else {
       if (viewed.indexOf(tripID) === -1) {
@@ -246,7 +294,9 @@ const experience = (() => {
     const experienceInfo = but
       .closest(".w-dyn-item")
       .querySelector("[data-gallery='true']");
+    console.log(experienceInfo);
     const trip = tripID(experienceInfo);
+    console.log(trip);
     const exp = expID(experienceInfo);
     initializeButton(but, trip, exp);
   };
@@ -353,11 +403,8 @@ const bubble = (() => {
   };
 })();
 
-const signup1 = document.querySelector(".signup1-section");
-const signup2 = document.querySelector(".itin-signup-barrier-cont");
-
 const createSignUpWindow2 = (() => {
-  signup2.style.display = "none";
+  signup.style.display = "none";
 
   let buttons = document.querySelectorAll('[id="select-experience"]');
   let block3 = document.querySelector("#BLOCK3");
@@ -367,57 +414,12 @@ const createSignUpWindow2 = (() => {
       document.addEventListener("scroll", () => {
         if (window.pageYOffset > block3.offsetTop && !Auth.currentUser) {
           loadLogInEventListeners(true);
-          signup2.style.display = "flex";
+          signup.style.display = "flex";
         }
       });
     });
   });
 })();
-
-const loadLogInEventListeners = (boo) => {
-  const google = document.querySelectorAll("#google");
-  const facebook = document.querySelectorAll("#facebook");
-  const emailAuth = document.getElementById("email");
-  const emailNext = [...document.querySelectorAll(".email-next")];
-  const emailClick = document.getElementById("email-click");
-  const providers = [...google, ...facebook];
-
-  if (boo) {
-    credentialAuth.inputEventListeners(true);
-    emailAuth.addEventListener("click", () => credentialAuth.signIn());
-    emailClick.addEventListener("click", () => {
-      emailNext.forEach((elm) => (elm.style.display = "block"));
-      providers.forEach((elm) => (elm.style.display = "none"));
-      emailClick.style.display = "none";
-      emailAuth.style.display = "block";
-    });
-    providers.forEach((but) => {
-      but.addEventListener("click", () => providerAuth.assign(but));
-    });
-  } else {
-    credentialAuth.inputEventListeners(false);
-    emailAuth.removeEventListener("click", () => credentialAuth.signIn());
-    emailNext.forEach((elm) => (elm.style.display = "none"));
-    providers.forEach((but) => {
-      but.removeEventListener("click", () => providerAuth.assign(but));
-      but.style.display = "block";
-    });
-    emailClick.style.display = "block";
-    emailAuth.style.display = "none";
-  }
-};
-
-const showSignIn = (boo) => {
-  if (boo) {
-    loadLogInEventListeners(true);
-    signup1.style.display = "block";
-    signup1.style.zIndex = 99;
-  } else {
-    loadLogInEventListeners(false);
-    signup1.style.display = "none";
-    signup2.style.display = "none";
-  }
-};
 
 if (authenticated()) {
   const exps = localStorageFunction.localUser.experiences;

@@ -16,7 +16,7 @@ setTimeout(() => {
                 &nbsp;
               </div>
             </div>`;
-}, 2000);
+}, 1500);
 
 async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -104,7 +104,7 @@ const selectExperiences = () => {
   let buttons = document.querySelectorAll('[id="select-experience"]');
 
   itinSection.style.opacity = 0;
-  itinSection.style.zIndex = -1;
+  itinSection.style.zIndex = 99;
   itinSection.style.transition = "all 1s ease";
 
   buttons.forEach((button) => {

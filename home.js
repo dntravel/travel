@@ -1,4 +1,5 @@
 const tripUrlSection = document.getElementById("TRIPID-URLS");
+console.log(tripUrlSection);
 const tripUrlElements =
   tripUrlSection.firstElementChild.firstElementChild.children;
 
@@ -14,8 +15,11 @@ const destinations = [...tripUrlElements].map((elm) => {
     display,
   };
 });
+console.log(destinations);
 
 let user = JSON.parse(localStorage.getItem("User"));
+
+console.log(user);
 
 const authenticated = () => JSON.parse(sessionStorage.getItem("Authenticated"));
 const trips = (exp) => [...new Set(exp.map((exp) => exp.tripID))];
@@ -41,6 +45,16 @@ const firebaseCall = () => {
   return {
     pull,
   };
+};
+
+const home = async (exps) => {
+  const tripIds = exps.length ? trips(exps) : user.viewed;
+  destinationList(tripIds);
+  loadingDiv.style.display = "none";
+  newDiv.style.display = "none ";
+  returnDiv.style.display = "block";
+  user.experiences = exps;
+  localStorage.setItem("User", JSON.stringify(user));
 };
 
 const welcomeBack = (n) => {
@@ -73,29 +87,19 @@ const returnUser = () => {
   firebaseCall()
     .pull()
     .then((exps) => {
-      const tripIds = exps.length ? trips(exps) : user.viewed;
-      destinationList(tripIds);
-      loadingDiv.style.display = "none";
-      returnDiv.style.display = "block";
-      user.experiences = exps;
-      user.name = Auth.currentUser.displayName
-        ? Auth.currentUser.displayName
-        : "";
-      localStorage.setItem("User", JSON.stringify(user));
+      home(exps);
       sessionStorage.setItem("Authenticated", JSON.stringify(true));
     });
 };
 
 const returnHome = () => {
-  const experiences = user.experiences;
-  const tripIds = experiences.length ? trips(experiences) : user.viewed;
-  destinationList(tripIds);
-  loadingDiv.style.display = "none";
-  returnDiv.style.display = "block";
+  const exps = user.experiences;
+  home(exps);
 };
 
 const newUser = () => {
   loadingDiv.style.display = "none";
+  returnDiv.style.display = "none";
   newDiv.style.display = "block ";
 };
 
