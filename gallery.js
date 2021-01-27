@@ -1,5 +1,4 @@
-setTimeout(() => {
-  document.getElementById("wistia").innerHTML = `<div
+document.getElementById("wistia").innerHTML = `<div
               class="wistia_responsive_wrapper"
               style="
                 height: 100%;
@@ -16,7 +15,6 @@ setTimeout(() => {
                 &nbsp;
               </div>
             </div>`;
-}, 1500);
 
 async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
