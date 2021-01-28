@@ -401,12 +401,8 @@ const bubble = (() => {
 })();
 
 const createSignUpWindow2 = (() => {
-  signup.style.display = "none";
-
   let buttons = document.querySelectorAll('[id="select-experience"]');
   let block3 = document.querySelector("#BLOCK3");
-
-  console.log(buttons, block3);
 
   buttons.forEach((but) => {
     but.addEventListener("click", () => {

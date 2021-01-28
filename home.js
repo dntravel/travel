@@ -1,5 +1,4 @@
 const tripUrlSection = document.getElementById("TRIPID-URLS");
-console.log(tripUrlSection);
 const tripUrlElements =
   tripUrlSection.firstElementChild.firstElementChild.children;
 
@@ -15,11 +14,8 @@ const destinations = [...tripUrlElements].map((elm) => {
     display,
   };
 });
-console.log(destinations);
 
 let user = JSON.parse(localStorage.getItem("User"));
-
-console.log(user);
 
 const authenticated = () => JSON.parse(sessionStorage.getItem("Authenticated"));
 const trips = (exp) => [...new Set(exp.map((exp) => exp.tripID))];
@@ -102,15 +98,12 @@ const newUser = () => {
 };
 
 if (authenticated()) {
-  console.log("1");
   returnHome();
 } else {
   Auth.onAuthStateChanged((user) => {
     if (user) {
       returnUser();
-      console.log("2");
     } else {
-      console.log("3");
       newUser();
     }
   });
