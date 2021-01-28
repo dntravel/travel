@@ -36,6 +36,8 @@ const loadLogInEventListeners = (boo) => {
 
 const signup = document.querySelector(".itin-signup-barrier-cont");
 
+console.log(signup);
+
 const showSignIn = (boo) => {
   if (boo) {
     loadLogInEventListeners(true);
@@ -112,10 +114,7 @@ const localStorageFunction = (() => {
     let tripID = document
       .querySelector(".itin-exp-btns_txt")
       .getAttribute("data-tripid");
-    console.log(tripID);
     let viewed = localUser.viewed;
-    console.log(viewed);
-
     if (!viewed && tripID) {
       viewed = [tripID];
     } else {
@@ -294,9 +293,7 @@ const experience = (() => {
     const experienceInfo = but
       .closest(".w-dyn-item")
       .querySelector("[data-gallery='true']");
-    console.log(experienceInfo);
     const trip = tripID(experienceInfo);
-    console.log(trip);
     const exp = expID(experienceInfo);
     initializeButton(but, trip, exp);
   };
@@ -408,6 +405,8 @@ const createSignUpWindow2 = (() => {
 
   let buttons = document.querySelectorAll('[id="select-experience"]');
   let block3 = document.querySelector("#BLOCK3");
+
+  console.log(buttons, block3);
 
   buttons.forEach((but) => {
     but.addEventListener("click", () => {

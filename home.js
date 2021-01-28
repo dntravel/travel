@@ -58,19 +58,17 @@ const home = async (exps) => {
 };
 
 const welcomeBack = (n) => {
-  const message = document.getElementById("welcome-back");
+  const message = document.querySelector(".home-return-welcome_txt");
   const name = " " + n[0].toUpperCase() + n.substring(1, n.indexOf(" "));
   message.innerHTML = `Welcome Back${name}!`;
 };
 
 const destinationList = (arr) => {
   const locationList = document.getElementById("destinations");
-
   if (user.name) welcomeBack(user.name);
 
   arr.forEach((desId) => {
     let trip = destinations.find((obj) => obj.id === desId);
-
     let listitem = document.createElement("li");
 
     let link = document.createElement("a");
@@ -104,12 +102,15 @@ const newUser = () => {
 };
 
 if (authenticated()) {
+  console.log("1");
   returnHome();
 } else {
   Auth.onAuthStateChanged((user) => {
     if (user) {
       returnUser();
+      console.log("2");
     } else {
+      console.log("3");
       newUser();
     }
   });
