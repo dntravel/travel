@@ -10,33 +10,31 @@ const loadLogInEventListeners = (boo) => {
   const providers = [...google, ...facebook];
 
   if (boo) {
-    credentialAuth.inputEventListeners(true);
-    emailAuth.addEventListener("click", () => credentialAuth.signIn());
-    emailClick.addEventListener("click", () => {
-      emailNext.forEach((elm) => (elm.style.display = "block"));
-      providers.forEach((elm) => (elm.style.display = "none"));
-      emailClick.style.display = "none";
-      emailAuth.style.display = "block";
-    });
+    // credentialAuth.inputEventListeners(true);
+    // emailAuth.addEventListener("click", () => credentialAuth.signIn());
+    // emailClick.addEventListener("click", () => {
+    //   emailNext.forEach((elm) => (elm.style.display = "block"));
+    //   providers.forEach((elm) => (elm.style.display = "none"));
+    //   emailClick.style.display = "none";
+    //   emailAuth.style.display = "block";
+    // });
     providers.forEach((but) => {
       but.addEventListener("click", () => providerAuth.assign(but));
     });
   } else {
-    credentialAuth.inputEventListeners(false);
-    emailAuth.removeEventListener("click", () => credentialAuth.signIn());
-    emailNext.forEach((elm) => (elm.style.display = "none"));
+    // credentialAuth.inputEventListeners(false);
+    // emailAuth.removeEventListener("click", () => credentialAuth.signIn());
+    // emailNext.forEach((elm) => (elm.style.display = "none"));
     providers.forEach((but) => {
       but.removeEventListener("click", () => providerAuth.assign(but));
       but.style.display = "block";
     });
-    emailClick.style.display = "block";
-    emailAuth.style.display = "none";
+    // emailClick.style.display = "block";
+    // emailAuth.style.display = "none";
   }
 };
 
 const signup = document.querySelector(".itin-signup-barrier-cont");
-
-console.log(signup);
 
 const showSignIn = (boo) => {
   if (boo) {
@@ -140,82 +138,82 @@ const localStorageFunction = (() => {
 })();
 
 // SIGN IN CREDENTIALS
-const credentialAuth = (() => {
-  const local = localStorageFunction.localUser;
-  const emailInput = document.getElementById("email-input");
-  const passwordInput = document.getElementById("password-input");
+// const credentialAuth = (() => {
+//   const local = localStorageFunction.localUser;
+// const emailInput = document.getElementById("email-input");
+// const passwordInput = document.getElementById("password-input");
 
-  let email = "";
-  let password = "";
+// let email = "";
+// let password = "";
 
-  const emailChangeOnInput = () => {
-    if (/@gmail.com$/.test(emailInput.value)) {
-      email = normalizeGmail(emailInput.value);
-    } else {
-      email = emailInput.value;
-    }
-  };
+// const emailChangeOnInput = () => {
+//   if (/@gmail.com$/.test(emailInput.value)) {
+//     email = normalizeGmail(emailInput.value);
+//   } else {
+//     email = emailInput.value;
+//   }
+// };
 
-  const inputEventListeners = (boo) => {
-    if (boo) {
-      emailInput.addEventListener("input", () => emailChangeOnInput());
-      passwordInput.addEventListener(
-        "input",
-        () => (password = passwordInput.value)
-      );
-    } else {
-      emailInput.removeEventListener("input", () => emailChangeOnInput());
-      passwordInput.removeEventListener(
-        "input",
-        () => (password = passwordInput.value)
-      );
-    }
-  };
+// const inputEventListeners = (boo) => {
+//   if (boo) {
+//     emailInput.addEventListener("input", () => emailChangeOnInput());
+//     passwordInput.addEventListener(
+//       "input",
+//       () => (password = passwordInput.value)
+//     );
+//   } else {
+//     emailInput.removeEventListener("input", () => emailChangeOnInput());
+//     passwordInput.removeEventListener(
+//       "input",
+//       () => (password = passwordInput.value)
+//     );
+//   }
+// };
 
-  const normalizeGmail = (str) => {
-    const inx = str.indexOf("@");
-    return str.substring(0, inx).replace(".", "") + str.substring(inx);
-  };
+// const normalizeGmail = (str) => {
+//   const inx = str.indexOf("@");
+//   return str.substring(0, inx).replace(".", "") + str.substring(inx);
+// };
 
-  const signIn = async () => {
-    await Auth.signInWithEmailAndPassword(email, password).catch(() =>
-      signUp()
-    );
-  };
+// const signIn = async () => {
+//   await Auth.signInWithEmailAndPassword(email, password).catch(() =>
+//     signUp()
+//   );
+// };
 
-  const signUp = async () => {
-    await Auth.createUserWithEmailAndPassword(email, password).catch(
-      (error) => {
-        // ADD IF EMAIL USED IS IN DB
-        const enteredEmailStored = email === local.email;
-        if (error.code === "auth/email-already-in-use" || enteredEmailStored) {
-          link();
-        }
-      }
-    );
-  };
+// const signUp = async () => {
+//   await Auth.createUserWithEmailAndPassword(email, password).catch(
+//     (error) => {
+//       // ADD IF EMAIL USED IS IN DB
+//       const enteredEmailStored = email === local.email;
+//       if (error.code === "auth/email-already-in-use" || enteredEmailStored) {
+//         link();
+//       }
+//     }
+//   );
+// };
 
-  const link = async () => {
-    const credentials = await firebase.auth.EmailAuthProvider.credential(
-      email,
-      password
-    );
-    await providerAuth.LogInToLink();
-    await Auth.currentUser
-      .linkWithCredential(await credentials)
-      .then((result) => {
-        if (!local.photoURL) {
-          local.photoURL = result.user.photoURL;
-        }
-      })
-      .catch();
-  };
+//   const link = async () => {
+//     const credentials = await firebase.auth.EmailAuthProvider.credential(
+//       email,
+//       password
+//     );
+//     await providerAuth.LogInToLink();
+//     await Auth.currentUser
+//       .linkWithCredential(await credentials)
+//       .then((result) => {
+//         if (!local.photoURL) {
+//           local.photoURL = result.user.photoURL;
+//         }
+//       })
+//       .catch();
+//   };
 
-  return {
-    signIn,
-    inputEventListeners,
-  };
-})();
+//   return {
+//     signIn,
+//     inputEventListeners,
+//   };
+// })();
 
 // SIGN IN PROVIDER
 const providerAuth = (() => {
