@@ -16,10 +16,10 @@ const Functions = firebase.functions();
 const facebookInit = () => {
   window.fbAsyncInit = function () {
     FB.init({
-      appId: 367693800966361,
+      appId: 185191803291906,
       cookie: true,
       xfbml: true,
-      version: "v8.0",
+      version: "v9.0",
     });
 
     FB.AppEvents.logPageView();

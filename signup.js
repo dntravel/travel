@@ -4,9 +4,9 @@ const authenticated = () => JSON.parse(sessionStorage.getItem("Authenticated"));
 const loadLogInEventListeners = (boo) => {
   const google = document.querySelectorAll("#google");
   const facebook = document.querySelectorAll("#facebook");
-  const emailAuth = document.getElementById("email");
-  const emailNext = [...document.querySelectorAll(".email-next")];
-  const emailClick = document.getElementById("email-click");
+  // const emailAuth = document.getElementById("email");
+  // const emailNext = [...document.querySelectorAll(".email-next")];
+  // const emailClick = document.getElementById("email-click");
   const providers = [...google, ...facebook];
 
   if (boo) {
@@ -345,13 +345,12 @@ const bubble = (() => {
     return await experienceArray;
   };
 
-  const edit = async (but) => {
+  const edit = async (user, but) => {
     if (!Auth.currentUser) return;
 
     const editExperiences = Functions.httpsCallable("editExperience");
-
     editExperiences({
-      userID: userId,
+      userID: user.uid,
       tripID: experience.tripID(but),
       experienceID: experience.expID(but),
     }).catch();
@@ -359,10 +358,9 @@ const bubble = (() => {
 
   const register = async (user) => {
     const signUp = Functions.httpsCallable("signUp");
-
     signUp({
       email: user.email,
-      userID: userId,
+      userID: user.uid,
     }).catch();
   };
 
@@ -383,8 +381,12 @@ const bubble = (() => {
         .catch();
     } else {
       await register(user)
-        .then(() => {
-          edit(document.querySelector("[data-experience-selected='true']"));
+        .then((pop) => {
+          console.log(user, pop);
+          edit(
+            user,
+            document.querySelector("[data-experience-selected='true']")
+          );
           sessionStorage.setItem("Authenticated", "true");
         })
         .catch();
