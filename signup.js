@@ -272,7 +272,7 @@ const experience = (() => {
       ? showSelectedExperience(but, true)
       : showSelectedExperience(but, false);
 
-    bubble.edit(but);
+    bubble.edit((user = Auth.currentUser), but);
     localStorageFunction.editExperience(but);
   };
 
@@ -349,6 +349,7 @@ const bubble = (() => {
     if (!Auth.currentUser) return;
 
     const editExperiences = Functions.httpsCallable("editExperience");
+    debugger;
     editExperiences({
       userID: user.uid,
       tripID: experience.tripID(but),
