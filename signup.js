@@ -349,7 +349,6 @@ const bubble = (() => {
     if (!Auth.currentUser) return;
 
     const editExperiences = Functions.httpsCallable("editExperience");
-    debugger;
     editExperiences({
       userID: user.uid,
       tripID: experience.tripID(but),
